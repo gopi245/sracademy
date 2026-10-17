@@ -94,8 +94,32 @@ main{max-width:1150px;margin:0 auto;padding:22px 16px 60px}
 .statrow{display:flex;justify-content:space-around;margin:18px 0}.statrow div{text-align:center}.statrow b{font-size:22px;display:block}
 .fab{position:fixed;right:22px;bottom:22px;width:58px;height:58px;border-radius:50%;font-size:24px;box-shadow:0 6px 20px rgba(0,0,0,.25);padding:0;z-index:20}
 @media(max-width:1200px){.shell{grid-template-columns:230px minmax(0,1fr)}.aside{grid-column:2;position:static;height:auto;border-left:0;border-top:1px solid var(--line)}}
-@media(max-width:780px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:10px}
- .side .logo{padding:6px;width:100%}.side .srch{width:100%;margin-bottom:6px}.side #nav{display:flex;flex-wrap:wrap;gap:4px}.side a.it{padding:8px 10px}.side .me{display:none}.aside{grid-column:1}.mainc{padding:18px 16px 90px}}
+.mtop,.bnav,.scrim{display:none}
+@media(max-width:780px){
+ .shell{grid-template-columns:1fr}
+ .mtop{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:30;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));padding-top:calc(10px + env(safe-area-inset-top,0px));background:linear-gradient(170deg,#1e3a8a,#1d4ed8);color:#fff}
+ .mtop .logo{color:#fff;font-size:19px}.mtop .logo span{color:var(--brand)}
+ .mtop button{background:rgba(255,255,255,.14);color:#fff;font-size:20px;padding:6px 12px;line-height:1}
+ .mtop .av{width:34px;height:34px;font-size:15px}
+ .side{position:fixed;inset:0 auto 0 0;width:min(82vw,300px);height:100%;z-index:50;transform:translateX(-105%);transition:transform .25s ease;padding-top:calc(18px + env(safe-area-inset-top,0px));padding-left:max(14px,env(safe-area-inset-left,0px))}
+ .side.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.4)}
+ .scrim{position:fixed;inset:0;background:rgba(10,15,30,.45);z-index:40}.scrim.show{display:block}
+ .mainc{padding:16px max(16px,env(safe-area-inset-right,0px)) 110px max(16px,env(safe-area-inset-left,0px))}
+ .aside{grid-column:1;padding:18px max(16px,env(safe-area-inset-right,0px)) 100px max(16px,env(safe-area-inset-left,0px))}
+ .mainc h1{font-size:24px!important}h2{font-size:21px}
+ .bnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:35;background:var(--card);border-top:1px solid var(--line);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+ .bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);padding:4px 0;border-radius:10px;cursor:pointer;text-decoration:none}
+ .bnav a span{font-size:20px}.bnav a.on{color:#1d4ed8;font-weight:700;background:#e8efff}
+ .fab{bottom:calc(76px + env(safe-area-inset-bottom,0px));right:max(16px,env(safe-area-inset-right,0px));width:50px;height:50px;font-size:21px}
+ .mod{flex:0 0 92px}.mod .bx{height:46px;font-size:18px}.mod .nm{font-size:11px}
+ .mods>button{display:none}
+ .topic .hd{padding:14px 16px}.tl{padding:6px 14px 12px}.ti{padding-left:22px;gap:10px}.ti .arrow{font-size:18px}
+ .banner{padding:12px 14px;font-size:14px}
+ .tool .out{font-size:18px}.cert{padding:28px 14px}.cert h1{font-size:26px}
+ .tabs button{flex:1}
+}
+@media(max-width:780px) and (prefers-color-scheme:dark){:root:not([data-theme="light"]) .bnav a.on{background:#1e2a4a;color:#93b4ff}}
+:root[data-theme="dark"] .bnav a.on{background:#1e2a4a;color:#93b4ff}
 @media print{.side,.aside,.fab{display:none!important}.shell{display:block}}
 @media print{header,.noprint{display:none!important}body{background:#fff}}
 </style>
@@ -117,6 +141,8 @@ main{max-width:1150px;margin:0 auto;padding:22px 16px 60px}
 </section>
 
 <div id="app" class="hidden shell">
+  <div class="mtop"><button aria-label="Open menu" onclick="menu(true)">☰</button><div class="logo">⚡ Volt<span>Academy</span></div><div class="av" id="mAv" onclick="go('home');document.getElementById('aside').scrollIntoView({behavior:'smooth'})"></div></div>
+  <div class="scrim" id="scrim" onclick="menu(false)"></div>
   <aside class="side">
     <div class="logo">⚡ Volt<span>Academy</span></div>
     <div class="srch"><span>🔍</span><input id="gsearch" placeholder="Search for &quot;Ohm's law&quot;"></div>
@@ -125,6 +151,7 @@ main{max-width:1150px;margin:0 auto;padding:22px 16px 60px}
   </aside>
   <main class="mainc" id="view"></main>
   <aside class="aside" id="aside"></aside>
+  <nav class="bnav" id="bnav"><a data-v="home"><span>🏠</span>Home</a><a data-v="curriculum"><span>🧭</span>Journey</a><a data-v="doubts"><span>💬</span>Doubts</a><a data-v="notebook"><span>📒</span>Notes</a><a data-v="tools"><span>🧮</span>Tools</a></nav>
   <button class="fab" title="Ask a doubt" onclick="go('doubts')">💬</button>
 </div>
 
@@ -197,13 +224,15 @@ function login(){const n=$("#lname").value.trim(),e=$("#lemail").value.trim(),r=
 function logout(){user=null;S.set("user",null);$("#app").classList.add("hidden");$("#login").classList.remove("hidden")}
 function start(){const t=new Date().toISOString().slice(0,10);if(!days.includes(t)){days.push(t);S.set("days",days)}
  $("#login").classList.add("hidden");$("#app").classList.remove("hidden");
- $("#who").textContent=user.name;$("#meAv").textContent=user.name[0].toUpperCase();
+ $("#who").textContent=user.name;$("#meAv").textContent=user.name[0].toUpperCase();$("#mAv").textContent=user.name[0].toUpperCase();
+ document.querySelectorAll("#bnav a").forEach(a=>a.onclick=()=>go(a.dataset.v));
  const tabs=[["home","🏠","Home"],["curriculum","🧭","My Journey"],["notebook","📒","My Notebook",1],["bookmarks","🔖","Bookmarks"],["doubts","💬","My Discussions"],["tools","🧮","EE Playground",1],
   ...(isFac()?[["faculty","👩‍🏫","Faculty Panel"]]:[["cert","🎓","Certificate"]])];
  $("#nav").innerHTML=tabs.map(([k,ic,v,nw])=>`<a class="it" data-v="${k}"><span class="ic">${ic}</span>${v}${nw?'<span class="new">New</span>':""}</a>`).join("");
  document.querySelectorAll("#nav a").forEach(a=>a.onclick=()=>go(a.dataset.v));
- $("#gsearch").oninput=e=>{go("curriculum",e.target.value);$("#gsearch").focus()};go("home")}
-function go(v,...a){document.querySelectorAll("#nav a").forEach(x=>x.classList.toggle("on",x.dataset.v===({lesson:"curriculum",quiz:"curriculum",cheat:"home"}[v]||v)));
+ $("#gsearch").oninput=e=>{go("curriculum",e.target.value);menu(innerWidth<=780);$("#gsearch").focus()};go("home")}
+function menu(o){$(".side").classList.toggle("open",o);$("#scrim").classList.toggle("show",o)}
+function go(v,...a){menu(false);document.querySelectorAll("#nav a,#bnav a").forEach(x=>x.classList.toggle("on",x.dataset.v===({lesson:"curriculum",quiz:"curriculum",cheat:"home"}[v]||v)));
  ctx={view:v,args:a};V[v](...a);renderAside();window.scrollTo(0,0)}
 function renderAside(){const tp=pts[today()]||0,pc=Math.min(100,Math.round(100*tp/GOAL)),r=52,c=2*Math.PI*r,left=24-new Date().getHours();
  $("#aside").innerHTML=`<div class="row" style="gap:14px;flex-wrap:nowrap"><div class="av lg">${esc(user.name[0].toUpperCase())}</div><div><b style="font-size:17px">${esc(user.name)}</b>
