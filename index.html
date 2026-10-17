@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VoltAcademy</title>
+<title>SR Academy</title>
 <style>
 :root{--bg:#f4f6fa;--card:#fff;--text:#18212f;--muted:#667388;--line:#e2e7ef;--brand:#f59e0b;--brand-d:#b45309;--soft:#fff4dc;--blue:#2563eb;--ok:#15a34a;--bad:#dc2626}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1218;--card:#161e29;--text:#e8edf4;--muted:#94a1b5;--line:#263142;--brand:#fbbf24;--brand-d:#fbbf24;--soft:#2b2412;--blue:#60a5fa;--ok:#34d399;--bad:#f87171}}
@@ -128,7 +128,7 @@ main{max-width:1150px;margin:0 auto;padding:22px 16px 60px}
 
 <section id="login">
   <div class="box">
-    <div class="logo">⚡ Volt<span>Academy</span></div>
+    <div class="logo">⚡ SR <span>Academy</span></div>
     <p class="muted" style="margin:4px 0 16px">Department of Electrical Engineering · Online Learning</p>
     <div class="seg" id="roleSeg"><button class="on" data-r="student">Student</button><button data-r="faculty">Faculty</button></div>
     <label>Full name</label><input id="lname" placeholder="Your name">
@@ -141,10 +141,10 @@ main{max-width:1150px;margin:0 auto;padding:22px 16px 60px}
 </section>
 
 <div id="app" class="hidden shell">
-  <div class="mtop"><button aria-label="Open menu" onclick="menu(true)">☰</button><div class="logo">⚡ Volt<span>Academy</span></div><div class="av" id="mAv" onclick="go('home');document.getElementById('aside').scrollIntoView({behavior:'smooth'})"></div></div>
+  <div class="mtop"><button aria-label="Open menu" onclick="menu(true)">☰</button><div class="logo">⚡ SR <span>Academy</span></div><div class="av" id="mAv" onclick="go('home');document.getElementById('aside').scrollIntoView({behavior:'smooth'})"></div></div>
   <div class="scrim" id="scrim" onclick="menu(false)"></div>
   <aside class="side">
-    <div class="logo">⚡ Volt<span>Academy</span></div>
+    <div class="logo">⚡ SR <span>Academy</span></div>
     <div class="srch"><span>🔍</span><input id="gsearch" placeholder="Search for &quot;Ohm's law&quot;"></div>
     <div id="nav"></div>
     <div class="me"><div class="av" id="meAv"></div><div style="flex:1;min-width:0"><div id="who" style="color:#fff;font-weight:600"></div><a style="color:#bcd0fb;font-size:13px;cursor:pointer" onclick="logout()">Logout</a></div></div>
@@ -351,8 +351,8 @@ cert(){const allDone=done.length===ALL.length,allQ=MODULES.every(m=>passed(m.id)
  if(!(allDone&&allQ)){$("#view").innerHTML=`<h2>Certificate</h2><div class="card"><p>Finish every requirement to unlock your certificate:</p>
   <p>${allDone?"✅":"⬜"} Complete all ${ALL.length} lessons (${done.length} done)</p>
   ${MODULES.map(m=>`<p>${passed(m.id)?"✅":"⬜"} Pass quiz: ${m.title} ${quiz[m.id]!=null?`(best ${quiz[m.id]}%)`:""}</p>`).join("")}</div>`;return}
- const avg=Math.round(MODULES.reduce((s,m)=>s+quiz[m.id],0)/MODULES.length),id="VA-"+(user.email.length*7919+done.length).toString(36).toUpperCase();
- $("#view").innerHTML=`<div class="cert"><div class="logo">⚡ Volt<span>Academy</span></div><p class="muted">Department of Electrical Engineering</p>
+ const avg=Math.round(MODULES.reduce((s,m)=>s+quiz[m.id],0)/MODULES.length),id="SRA-"+(user.email.length*7919+done.length).toString(36).toUpperCase();
+ $("#view").innerHTML=`<div class="cert"><div class="logo">⚡ SR <span>Academy</span></div><p class="muted">Department of Electrical Engineering</p>
   <p>This certifies that</p><h1>${esc(user.name)}</h1><p class="muted">${esc(user.extra)}</p>
   <p>has completed <b>Foundations of Electrical Engineering</b><br>(${MODULES.length} modules · ${ALL.length} lessons) with an average quiz score of <b>${avg}%</b>.</p>
   <p class="muted">Issued ${new Date().toLocaleDateString()} · Certificate ID ${id}</p><p style="margin-top:30px">______________________<br>Head of Department</p></div>

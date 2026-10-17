@@ -1,4 +1,4 @@
-# VoltAcademy
+# SR Academy
 
 Online learning platform for Electrical Engineering: video lessons, study notes, module quizzes, a doubt forum, EE calculators and certificates.
 
