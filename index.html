@@ -92,6 +92,7 @@ main{max-width:1150px;margin:0 auto;padding:22px 16px 60px}
 .pill.v{background:#e5edff;color:#2457d6}.pill.c{background:#f1e8ff;color:#7c3aed}.pill.p{background:#fff1d6;color:#b45309}
 .goal{display:grid;place-items:center;margin:14px 0;color:var(--text)}
 .statrow{display:flex;justify-content:space-around;margin:18px 0}.statrow div{text-align:center}.statrow b{font-size:22px;display:block}
+.backbtn{display:inline-flex;align-items:center;gap:4px;font-weight:600;margin-bottom:6px}
 .fab{position:fixed;right:22px;bottom:22px;width:58px;height:58px;border-radius:50%;font-size:24px;box-shadow:0 6px 20px rgba(0,0,0,.25);padding:0;z-index:20}
 @media(max-width:1200px){.shell{grid-template-columns:230px minmax(0,1fr)}.aside{grid-column:2;position:static;height:auto;border-left:0;border-top:1px solid var(--line)}}
 .mtop,.bnav,.scrim{display:none}
@@ -233,7 +234,11 @@ function start(){const t=new Date().toISOString().slice(0,10);if(!days.includes(
  $("#gsearch").oninput=e=>{go("curriculum",e.target.value);menu(innerWidth<=780);$("#gsearch").focus()};go("home")}
 function menu(o){$(".side").classList.toggle("open",o);$("#scrim").classList.toggle("show",o)}
 function go(v,...a){menu(false);document.querySelectorAll("#nav a,#bnav a").forEach(x=>x.classList.toggle("on",x.dataset.v===({lesson:"curriculum",quiz:"curriculum",cheat:"home"}[v]||v)));
+ if(ctx.view&&!go.popping&&!(ctx.view===v&&ctx.args[0]===a[0])){hist.push(ctx);try{history.pushState({d:hist.length},"")}catch(e){}}
  ctx={view:v,args:a};V[v](...a);renderAside();window.scrollTo(0,0)}
+const hist=[];
+function back(){const p=hist.pop();if(!p){go("home");return}go.popping=true;try{go(p.view,...p.args)}finally{go.popping=false}}
+addEventListener("popstate",()=>{if(user&&hist.length)back()});
 function renderAside(){const tp=pts[today()]||0,pc=Math.min(100,Math.round(100*tp/GOAL)),r=52,c=2*Math.PI*r,left=24-new Date().getHours();
  $("#aside").innerHTML=`<div class="row" style="gap:14px;flex-wrap:nowrap"><div class="av lg">${esc(user.name[0].toUpperCase())}</div><div><b style="font-size:17px">${esc(user.name)}</b>
   <div style="color:var(--blue);font-size:14px;margin-top:4px">🏆 ${isFac()?"Faculty":"Streak: "+streak()+" day"+(streak()===1?"":"s")}</div><div class="muted">${new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})}</div></div></div>
@@ -282,7 +287,7 @@ curriculum(q=""){const match=l=>l.t.toLowerCase().includes(q.toLowerCase());
  $("#srch").oninput=e=>{const p=e.target.selectionStart;V.curriculum(e.target.value);$("#srch").focus();$("#srch").setSelectionRange(p,p)}},
 
 lesson(key,tab="doubts"){const idx=ALL.findIndex(l=>l.key===key),l=ALL[idx],m=l.m,qs=doubts.filter(d=>d.lesson===key),isDone=done.includes(key);
- $("#view").innerHTML=`<a class="muted" style="cursor:pointer" onclick="go('curriculum')">← Curriculum</a>
+ $("#view").innerHTML=`<button class="ghost sm backbtn" onclick="back()">← Back</button>
  <div class="muted" style="margin-top:6px">${m.title}</div><div class="row between"><h2 style="margin:0 0 16px">${l.t}</h2><button class="ghost sm" style="margin-bottom:16px" onclick="toggleBm('${key}')">${bm.includes(key)?"🔖 Bookmarked":"🔖 Bookmark"}</button></div>
  <div class="player"><div>
   ${l.yt?(location.protocol==="file:"||window.self!==window.top?`<a class="video" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${l.yt}" style="display:grid;place-items:center;text-align:center;color:#fff;text-decoration:none;background:linear-gradient(135deg,#1f2937,#111)"><div><div style="font-size:56px">▶</div><b>Watch this lesson on YouTube</b><div style="opacity:.7;font-size:14px;margin-top:6px">Opens in a new tab</div></div></a>`:false)||(location.protocol==="file:"?`<div class="video" style="display:grid;place-items:center;text-align:center;color:#fff;padding:20px"><div>YouTube videos can't play when this page is opened as a file.<br><br><a style="color:#fbbf24" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${l.yt}">▶ Watch on YouTube</a></div></div>`
@@ -305,7 +310,7 @@ lesson(key,tab="doubts"){const idx=ALL.findIndex(l=>l.key===key),l=ALL[idx],m=l.
   <button class="ghost sm" style="width:100%;margin-top:10px" onclick="go('quiz','${m.id}')">📝 Module quiz</button>${exHtml(m)}</div></div>`},
 
 quiz(id,res){const m=MODULES.find(x=>x.id===id),Q=QUIZ[id];
- $("#view").innerHTML=`<a class="muted" style="cursor:pointer" onclick="go('curriculum')">← Curriculum</a><h2>Quiz: ${m.title}</h2>
+ $("#view").innerHTML=`<button class="ghost sm backbtn" onclick="back()">← Back</button><h2>Quiz: ${m.title}</h2>
  <p class="muted">Pass mark 70%. ${quiz[id]!=null?`Best score: ${quiz[id]}%`:""}</p>
  ${Q.map((q,i)=>`<div class="card" style="margin-bottom:12px"><b>Q${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<label class="opt ${res?(j===q[2]?"right":res[i]===j?"wrong":""):""}"><input type="radio" name="q${i}" value="${j}" ${res&&res[i]===j?"checked":""} ${res?"disabled":""}>${o}</label>`).join("")}</div>`).join("")}
  ${res?`<div class="card"><h3 style="margin:0">${Math.round(100*res.filter((a,i)=>a===Q[i][2]).length/Q.length)}% ${Math.round(100*res.filter((a,i)=>a===Q[i][2]).length/Q.length)>=70?"✅ Passed":"❌ Try again"}</h3>
@@ -359,7 +364,7 @@ cert(){const allDone=done.length===ALL.length,allQ=MODULES.every(m=>passed(m.id)
   <div class="row noprint" style="justify-content:center;margin-top:16px"><button onclick="print()">🖨 Print / Save as PDF</button></div>`},
 
 cheat(id){const m=MODULES.find(x=>x.id===id);award("cheat-"+id,10);
- $("#view").innerHTML=`<a class="muted" style="cursor:pointer" onclick="go('home')">← Schedule</a><h2 style="margin-top:8px">${m.title} | Cheat Sheet</h2>
+ $("#view").innerHTML=`<button class="ghost sm backbtn" onclick="back()">← Back</button><h2 style="margin-top:8px">${m.title} | Cheat Sheet</h2>
  ${m.lessons.map(l=>`<div class="card" style="margin-bottom:12px"><b>${l.t}</b><p style="margin:8px 0 0">${l.n}</p></div>`).join("")}
  <div class="row"><button onclick="go('quiz','${id}')">📝 Practice MCQs</button><button class="ghost" onclick="print()">🖨 Print</button></div>`},
 notebook(){const ks=Object.keys(notes).filter(k=>notes[k]&&notes[k].trim()&&ALL.find(l=>l.key===k));
