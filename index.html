@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VoltAcademy</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--text:#18212f;--muted:#667388;--line:#e2e7ef;--brand:#f59e0b;--brand-d:#b45309;--soft:#fff4dc;--blue:#2563eb;--ok:#15a34a;--bad:#dc2626}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1218;--card:#161e29;--text:#e8edf4;--muted:#94a1b5;--line:#263142;--brand:#fbbf24;--brand-d:#fbbf24;--soft:#2b2412;--blue:#60a5fa;--ok:#34d399;--bad:#f87171}}
+:root[data-theme="dark"]{--bg:#0d1218;--card:#161e29;--text:#e8edf4;--muted:#94a1b5;--line:#263142;--brand:#fbbf24;--brand-d:#fbbf24;--soft:#2b2412;--blue:#60a5fa;--ok:#34d399;--bad:#f87171}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+h1,h2,h3{line-height:1.2}h2{margin:0 0 16px}
+button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:9px 15px;background:var(--brand);color:#1b1300;font-weight:600}
+button.ghost{background:transparent;color:var(--text);border:1px solid var(--line);font-weight:500}
+button.sm{padding:5px 10px;font-size:13px}
+input,textarea,select{font:inherit;width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text)}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 0 5px}
+.hidden{display:none!important}.muted{color:var(--muted);font-size:14px}
+#login{min-height:100vh;display:grid;place-items:center;padding:16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;width:100%;max-width:400px}
+.logo{font-weight:800;font-size:22px}.logo span{color:var(--brand-d)}
+.err{color:var(--bad);font-size:14px;min-height:20px;margin-top:8px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.seg button{flex:1;border-radius:0;background:transparent;color:var(--muted);font-weight:500}
+.seg button.on{background:var(--soft);color:var(--brand-d);font-weight:700}
+header{display:flex;align-items:center;gap:14px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav{display:flex;gap:2px;flex:1;overflow-x:auto}
+nav a{padding:8px 11px;border-radius:8px;color:var(--muted);text-decoration:none;white-space:nowrap;cursor:pointer;font-size:15px}
+nav a.on{background:var(--soft);color:var(--brand-d);font-weight:600}
+main{max-width:1150px;margin:0 auto;padding:22px 16px 60px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.stat h2{margin:4px 0 0;font-size:28px}
+.bar{height:7px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:var(--ok)}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;background:var(--soft);color:var(--brand-d);margin-right:6px;white-space:nowrap}
+.tag.blue{background:transparent;border:1px solid var(--blue);color:var(--blue)}
+.tag.ok{background:transparent;border:1px solid var(--ok);color:var(--ok)}
+.tag.bad{background:transparent;border:1px solid var(--bad);color:var(--bad)}
+.module{margin-bottom:14px}.module-h{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.lesson{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;cursor:pointer}
+.lesson:hover,.lesson.on{background:var(--soft)}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:12px}
+.dot.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.player{display:grid;grid-template-columns:1fr 310px;gap:16px}@media(max-width:860px){.player{grid-template-columns:1fr}}
+.video{aspect-ratio:16/9;width:100%;border:0;border-radius:12px;background:#000;display:block}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}
+.tabs{display:flex;gap:6px;margin:14px 0 10px;flex-wrap:wrap}
+.doubt{border-top:1px solid var(--line);padding:14px 0}.doubt:first-of-type{border-top:0}
+.reply{margin:8px 0 0 14px;padding:8px 12px;border-left:3px solid var(--line);background:var(--bg);border-radius:4px;font-size:14px}
+.reply.fac{border-left-color:var(--blue)}.reply.acc{border-left-color:var(--ok)}
+.opt{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer}
+.opt input{width:auto;margin-right:8px}.opt.right{border-color:var(--ok)}.opt.wrong{border-color:var(--bad)}
+.tool .out{font-size:20px;font-weight:700;margin-top:10px;color:var(--brand-d)}
+.bands{display:flex;gap:6px;height:44px;margin:10px 0;padding:6px 30px;background:#e8d3a7;border-radius:22px}.bands i{width:14px;border-radius:2px}
+.cert{max-width:760px;margin:auto;text-align:center;border:8px double var(--brand);padding:40px 24px;background:var(--card)}
+.cert h1{font-size:34px;margin:6px 0}
+/* app shell */
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr) 320px;min-height:100vh}
+.side{background:linear-gradient(170deg,#1e3a8a 0%,#1d4ed8 100%);color:#dbe6ff;padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.side .logo{color:#fff;font-size:21px;padding:0 6px 16px}.side .logo span{color:var(--brand)}
+.side .srch{display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);border-radius:10px;padding:0 10px;margin-bottom:16px}
+.side .srch input{border:0;background:transparent;color:#fff;padding:10px 0}.side .srch input::placeholder{color:#a9c0f5}
+.side a.it{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:#dbe6ff;text-decoration:none;cursor:pointer;margin-bottom:2px}
+.side a.it:hover{background:rgba(255,255,255,.1)}.side a.it.on{background:#fff;color:#1d4ed8;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.side a.it .ic{width:20px;text-align:center}.side .new{margin-left:auto;background:#f97316;color:#fff;font-size:11px;padding:1px 7px;border-radius:10px}
+.side .me{margin-top:auto;border-top:1px solid rgba(255,255,255,.2);padding-top:12px;display:flex;align-items:center;gap:10px}
+.av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#f97316);color:#1b1300;display:grid;place-items:center;font-weight:800;flex:none}
+.av.lg{width:72px;height:72px;font-size:28px}
+.mainc{padding:26px 32px 80px;min-width:0;margin:0;max-width:none;width:100%}
+.aside{background:var(--card);border-left:1px solid var(--line);padding:22px 18px;position:sticky;top:0;height:100vh;overflow:auto}
+.days{display:flex;align-items:center;gap:6px;margin:14px 0 16px}.days .wrap{display:flex;gap:8px;overflow-x:auto;flex:1;padding:2px 2px 6px}
+.day{flex:none;width:52px;text-align:center;font-size:12px;color:var(--muted)}.day b{display:grid;place-items:center;height:44px;border-radius:10px;background:var(--card);border:1px solid var(--line);color:var(--text);font-size:16px;margin-top:6px;position:relative}
+.day.today b{border-color:var(--brand);box-shadow:0 0 0 2px var(--soft)}.day.act b::after{content:"";position:absolute;right:-3px;bottom:-3px;width:10px;height:10px;border-radius:50%;background:var(--ok);border:2px solid var(--card)}
+.day.fut b{opacity:.55}
+.mods{display:flex;align-items:center;gap:6px;margin:18px 0}.mods .wrap{display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;flex:1;padding:4px 2px 8px;scrollbar-width:thin}
+.mod{flex:1 0 118px;text-align:center}
+.mod{cursor:pointer}.mod small{color:var(--muted);font-weight:700;letter-spacing:.06em;font-size:11px}.mod .bx{display:grid;place-items:center;height:52px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:20px;font-weight:800;margin:6px 0;position:relative}
+.mod .nm{font-size:12px;line-height:1.25;color:var(--text);min-height:30px}
+.mod.on .bx{border-color:var(--brand);box-shadow:0 0 0 3px var(--soft);color:var(--brand-d)}.mod.on .nm{font-weight:700}.mod.st .bx::after{content:"";position:absolute;right:-3px;bottom:-3px;width:11px;height:11px;border-radius:50%;background:var(--brand);border:2px solid var(--card)}.mod.fin .bx::after{background:var(--ok)}
+.banner{background:#fff7d6;color:#3a3000;border-left:4px solid var(--brand);border-radius:10px;padding:14px 16px;margin-bottom:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .banner{background:#2b2412;color:#f7e7b0}}
+:root[data-theme="dark"] .banner{background:#2b2412;color:#f7e7b0}
+.topic{border-radius:14px;overflow:hidden;border:1px solid var(--line);margin-bottom:18px;background:var(--card)}
+.topic .hd{padding:18px 22px;color:#fff}.topic .hd small{letter-spacing:.08em;opacity:.9;font-weight:600}.topic .hd h3{margin:6px 0 0;font-size:20px}
+.tl{padding:8px 22px 16px}.tl .grp{font-weight:700;display:flex;gap:10px;align-items:center;padding:12px 0}
+.ring{width:26px;height:26px;border-radius:50%;border:3px solid var(--line);flex:none}.ring.full{border-color:var(--ok);background:var(--ok)}
+.ti{display:flex;align-items:center;gap:14px;padding:12px 0 12px 30px;border-left:2px solid var(--line);margin-left:12px;cursor:pointer;position:relative}
+.ti::before{content:"";position:absolute;left:-6px;top:20px;width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.ti.dn::before{background:var(--ok)}.ti:hover .arrow{transform:translateX(4px)}
+.ti .arrow{margin-left:auto;font-size:22px;color:var(--muted);transition:.15s}
+.pill{display:inline-flex;gap:6px;align-items:center;font-size:12px;font-weight:700;letter-spacing:.04em;padding:3px 10px;border-radius:6px}
+.pill.v{background:#e5edff;color:#2457d6}.pill.c{background:#f1e8ff;color:#7c3aed}.pill.p{background:#fff1d6;color:#b45309}
+.goal{display:grid;place-items:center;margin:14px 0;color:var(--text)}
+.statrow{display:flex;justify-content:space-around;margin:18px 0}.statrow div{text-align:center}.statrow b{font-size:22px;display:block}
+.fab{position:fixed;right:22px;bottom:22px;width:58px;height:58px;border-radius:50%;font-size:24px;box-shadow:0 6px 20px rgba(0,0,0,.25);padding:0;z-index:20}
+@media(max-width:1200px){.shell{grid-template-columns:230px minmax(0,1fr)}.aside{grid-column:2;position:static;height:auto;border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:780px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:10px}
+ .side .logo{padding:6px;width:100%}.side .srch{width:100%;margin-bottom:6px}.side #nav{display:flex;flex-wrap:wrap;gap:4px}.side a.it{padding:8px 10px}.side .me{display:none}.aside{grid-column:1}.mainc{padding:18px 16px 90px}}
+@media print{.side,.aside,.fab{display:none!important}.shell{display:block}}
+@media print{header,.noprint{display:none!important}body{background:#fff}}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <div class="box">
+    <div class="logo">⚡ Volt<span>Academy</span></div>
+    <p class="muted" style="margin:4px 0 16px">Department of Electrical Engineering · Online Learning</p>
+    <div class="seg" id="roleSeg"><button class="on" data-r="student">Student</button><button data-r="faculty">Faculty</button></div>
+    <label>Full name</label><input id="lname" placeholder="Your name">
+    <label>Email</label><input id="lemail" type="email" placeholder="you@college.edu">
+    <label id="rollL">Roll number</label><input id="lroll" placeholder="e.g. EEE2026-041">
+    <div class="err" id="lerr"></div>
+    <button style="width:100%" onclick="login()">Login</button>
+    <p class="muted" style="margin-top:14px">Demo mode: data is saved in this browser only.</p>
+  </div>
+</section>
+
+<div id="app" class="hidden shell">
+  <aside class="side">
+    <div class="logo">⚡ Volt<span>Academy</span></div>
+    <div class="srch"><span>🔍</span><input id="gsearch" placeholder="Search for &quot;Ohm's law&quot;"></div>
+    <div id="nav"></div>
+    <div class="me"><div class="av" id="meAv"></div><div style="flex:1;min-width:0"><div id="who" style="color:#fff;font-weight:600"></div><a style="color:#bcd0fb;font-size:13px;cursor:pointer" onclick="logout()">Logout</a></div></div>
+  </aside>
+  <main class="mainc" id="view"></main>
+  <aside class="aside" id="aside"></aside>
+  <button class="fab" title="Ask a doubt" onclick="go('doubts')">💬</button>
+</div>
+
+<script>
+const CR="Wikimedia Commons";
+// Every lesson plays inside the page from a video file shipped with the site. ex = extra YouTube videos (open in a new tab)
+const MODULES=[
+ {id:"m1",title:"Electrical Fundamentals",desc:"Charge, current, voltage and electric fields.",lessons:[
+  {t:"Electric Current – What is it?",file:"videos/electric-current.webm",cr:"“Electric Current. What is it?”, CC BY 3.0",n:"Current is the flow of charge: I = Q / t (1 A = 1 C/s). Conventional current flows from + to −; electrons move the opposite way. 1 A ≈ 6.24×10¹⁸ electrons per second."},
+  {t:"Voltage – What is it?",file:"videos/voltage.webm",cr:"“Voltage. What is it?”, CC BY 3.0",n:"Voltage is energy per unit charge: V = W / Q (1 V = 1 J/C). It is always measured between two points. Power P = V × I."},
+  {t:"Electric Fields and Field Lines",file:"videos/electric-fields.webm",cr:"“Electric Fields and Electric Field Lines”, CC BY 3.0",n:"Field lines start on positive charges and end on negative ones. Closer lines mean a stronger field. E = F / q (N/C or V/m)."}],
+  ex:[["Electricity – Basic Introduction","ybuhfEa-PrU"],["Electrical Engineering Basics in 8 Minutes","5Tvtj81rJ3M"]]},
+ {id:"m2",title:"DC Circuits & Ohm's Law",desc:"Ohm's law with worked examples, series and parallel circuits.",lessons:[
+  {t:"Ohm's Law – 3 Simple Examples",file:"videos/ohms-law.webm",cr:"“Ohm's Law. (3 Simple Examples)”, CC BY 3.0",n:"V = I × R. Series: R = R1 + R2 + …, same current everywhere. Parallel: 1/R = 1/R1 + 1/R2 + …, same voltage across each branch. Use the V-I-R triangle: cover the unknown."}],
+  ex:[["Ohm's Law Explained","HsLLq6Rm5tU"],["Current & Circuits, Charge, Power","r-SCyD7f_zI"],["Circuits and Ohm's Law (13 min)","JUY3PhZ-gf4"],["Understand Ohm's Law","Ackruj3hhJQ"]]},
+ {id:"m3",title:"AC Machines, Three-Phase & Transformers",desc:"Induction motors, three-phase power and transformers.",lessons:[
+  {t:"AC Induction Motor – Starting Transient",file:"videos/induction-motor.webm",cr:"“AC Induction motor transient”, CC BY-SA 4.0",n:"The stator's rotating magnetic field induces rotor current. Ns = 120f / P; slip s = (Ns − Nr) / Ns. Starting current is 5–7× full-load current, which is why large motors use star-delta or soft starters. Three-phase: P = √3 · V_L · I_L · cosφ. Transformers: V1/V2 = N1/N2 = I2/I1, AC only."}],
+  ex:[["How 3 Phase Power Works","c9gm_NL7KyE"],["How Electric Motors Work","59HBoIXzX_c"],["How Transformers Work: The Basics","Nfja9F8OdPM"],["Transformer Working Principle","UchitHGF4n8"],["How 3 Phase Transformers Work","u0SsejDCVkU"],["3 Phase Transformers – Full Lecture","rJCkCByWlqs"]]},
+ {id:"m5",title:"AC Motors",desc:"Induction, wound-rotor and single-phase motors.",lessons:[
+  {t:"AC Motors (Training Film) – Part 1 of 6",file:"videos/ac-motors-0.mp4",cr:"“AC MOTORS” training film, CC BY 3.0",n:"Rotating magnetic field: three stator windings fed 120° apart create a field that turns at synchronous speed Ns = 120f / P."},
+  {t:"AC Motors (Training Film) – Part 2 of 6",file:"videos/ac-motors-1.mp4",cr:"“AC MOTORS” training film, CC BY 3.0",n:"Squirrel-cage rotor: shorted bars cut the rotating field, current is induced and the rotor follows — always a little slower (slip)."},
+  {t:"AC Motors (Training Film) – Part 3 of 6",file:"videos/ac-motors-2.mp4",cr:"“AC MOTORS” training film, CC BY 3.0",n:"Slip s = (Ns − Nr) / Ns, typically 2–5% at full load. More load → more slip → more rotor current → more torque."},
+  {t:"AC Motors (Training Film) – Part 4 of 6",file:"videos/ac-motors-3.mp4",cr:"“AC MOTORS” training film, CC BY 3.0",n:"Wound-rotor motors add external resistance through slip rings to raise starting torque and limit starting current."},
+  {t:"AC Motors (Training Film) – Part 5 of 6",file:"videos/ac-motors-4.mp4",cr:"“AC MOTORS” training film, CC BY 3.0",n:"Single-phase motors need a starting aid: split-phase winding, capacitor-start or shaded pole, because one phase alone gives a pulsating field."},
+  {t:"AC Motors (Training Film) – Part 6 of 6",file:"videos/ac-motors-5.mp4",cr:"“AC MOTORS” training film, CC BY 3.0",n:"Summary: reversing any two supply lines of a three-phase motor reverses its direction of rotation."}],ex:[["How Electric Motors Work","59HBoIXzX_c"]]},
+ {id:"m6",title:"Electronics & Semiconductors",desc:"Diodes, transistors, amplifying and switching.",lessons:[
+  {t:"Principles of the Transistor – Part 1 of 3",file:"videos/transistor-0.mp4",cr:"“Electricity – Principles of the Transistor”, CC BY 3.0",n:"A transistor is three layers of doped semiconductor: NPN or PNP, with emitter, base and collector."},
+  {t:"Principles of the Transistor – Part 2 of 3",file:"videos/transistor-1.mp4",cr:"“Electricity – Principles of the Transistor”, CC BY 3.0",n:"Forward-bias the base-emitter junction and reverse-bias the collector-base junction to make the transistor conduct."},
+  {t:"Principles of the Transistor – Part 3 of 3",file:"videos/transistor-2.mp4",cr:"“Electricity – Principles of the Transistor”, CC BY 3.0",n:"A small base current controls a large collector current: Ic = β·Ib, and Ie = Ib + Ic. This is how a transistor amplifies or switches."}],ex:[]},
+ {id:"m4",title:"Electrical Safety at Home",desc:"Staying safe around live equipment and damaged supplies.",lessons:[
+  {t:"Electrical Safety During Storms & Flooding",file:"videos/hurricane-safety.webm",cr:"“Electrical Safety During a Hurricane”, public domain",n:"Never touch fallen lines or equipment standing in water. Switch off the main supply before entering a flooded room. Use RCDs/ELCBs (30 mA) on wet-area circuits. Get flood-damaged wiring inspected before re-energising."}],
+  ex:[]},
+ {id:"m7",title:"Industrial Safety: Arc Flash",desc:"Arc flash hazards, LOTO and protective equipment.",lessons:[
+  {t:"Arc Flash Awareness – Part 1 of 4",file:"videos/arc-flash-0.mp4",cr:"“Arc Flash Awareness”, public domain",n:"An arc flash is an explosive release of energy when current jumps through air between conductors. Temperatures can exceed 19,000 °C."},
+  {t:"Arc Flash Awareness – Part 2 of 4",file:"videos/arc-flash-1.mp4",cr:"“Arc Flash Awareness”, public domain",n:"Common causes: dropped tools, loose connections, dust or corrosion, and working on live equipment."},
+  {t:"Arc Flash Awareness – Part 3 of 4",file:"videos/arc-flash-2.mp4",cr:"“Arc Flash Awareness”, public domain",n:"Protection: de-energise and lock out/tag out (LOTO), verify with a tester, and keep the arc-flash boundary."},
+  {t:"Arc Flash Awareness – Part 4 of 4",file:"videos/arc-flash-3.mp4",cr:"“Arc Flash Awareness”, public domain",n:"Wear arc-rated PPE matched to the incident energy on the equipment label (cal/cm²). Never assume a circuit is dead."}],ex:[]}
+];
+const QUIZ={
+ m1:[["Unit of electric current?",["Volt","Ampere","Ohm","Watt"],1],["Voltage is energy per unit…",["time","charge","mass","resistance"],1],["Field lines start on…",["negative charges","positive charges","neutral objects","magnets only"],1]],
+ m2:[["V = 12 V, R = 4 Ω. Current?",["3 A","48 A","0.33 A","8 A"],0],["Two 10 Ω resistors in parallel give…",["20 Ω","10 Ω","5 Ω","0 Ω"],2],["In a series circuit, what stays the same?",["Voltage","Current","Power","Resistance"],1]],
+ m3:[["Synchronous speed of a 4-pole, 50 Hz motor?",["1500 rpm","3000 rpm","1000 rpm","750 rpm"],0],["Phase shift in a 3-phase system?",["90°","180°","120°","60°"],2],["Transformers work on…",["DC only","AC only","Both","Neither"],1]],
+ m4:[["A power line has fallen in your street. You should…",["Move it with a dry stick","Stay away and call the utility","Touch it to test","Cover it with a blanket"],1],["Before entering a flooded room you should…",["Switch off the main supply","Turn on the lights","Unplug items in the water","Nothing"],0],["A 30 mA RCD protects mainly against…",["Overload","Electric shock","Low voltage","Lightning"],1]],
+ m5:[["Synchronous speed of a 6-pole, 50 Hz motor?",["1000 rpm","1500 rpm","3000 rpm","500 rpm"],0],["To reverse a three-phase motor you…",["Swap any two supply lines","Swap all three lines","Reduce the voltage","Remove the neutral"],0],["Why does a single-phase motor need a starting winding?",["To reduce cost","One phase gives a pulsating, not rotating, field","To increase voltage","It doesn't"],1]],
+ m6:[["Ie equals…",["Ib − Ic","Ib + Ic","Ic / Ib","β·Ie"],1],["For a transistor to conduct, the base-emitter junction is…",["Reverse-biased","Forward-biased","Open","Shorted"],1],["Ib = 20 µA, β = 100. Ic = ?",["2 mA","0.2 mA","20 mA","200 µA"],0]],
+ m7:[["First step before working on equipment?",["Wear gloves","De-energise and lock out/tag out","Call a friend","Measure current"],1],["PPE is chosen using…",["Incident energy on the label (cal/cm²)","The colour of the panel","Wire size","Room temperature"],0],["A common cause of arc flash is…",["Dropped tools on live parts","LED lights","Low humidity","Earthing"],0]]
+};
+const MINS={"electric-current":7,"voltage":9,"electric-fields":5,"ohms-law":11,"induction-motor":1,"hurricane-safety":1,"ac-motors-5":2,"arc-flash-3":5};
+// Modules 3–7 are placeholders until the department records its own lectures
+MODULES.slice(2).forEach(m=>{m.lessons.forEach(l=>{delete l.file;delete l.cr});m.ex=[]});
+MODULES.forEach(m=>m.lessons.forEach((l,i)=>{l.key=m.id+"-"+i;l.mins=l.file?MINS[l.file.split("/").pop().replace(/\.(webm|mp4)$/,"")]||7:15}));
+const ALL=MODULES.flatMap(m=>m.lessons.map(l=>({...l,m})));
+
+const S={get(k,d){try{const v=localStorage.getItem("va_"+k);return v==null?d:JSON.parse(v)}catch{return d}},set(k,v){try{localStorage.setItem("va_"+k,JSON.stringify(v))}catch{}}};
+let user=S.get("user",null),done=S.get("done",[]),quiz=S.get("quiz",{}),doubts=S.get("doubts",[]),notes=S.get("notes",{}),
+ ann=S.get("ann",[{id:1,t:"Welcome to the EEE online semester! Finish Module 1 this week.",by:"HOD, EEE",at:"Oct 2026"}]),days=S.get("days",[]),pts=S.get("pts",{}),coins=S.get("coins",0),awarded=S.get("awarded",[]),bm=S.get("bm",[]),goalPaid=S.get("goalPaid",[]),role="student",ctx={};
+const today=()=>new Date().toISOString().slice(0,10),GOAL=100;
+const totalPts=()=>Object.values(pts).reduce((a,b)=>a+b,0);
+function award(key,n){if(awarded.includes(key))return;awarded.push(key);const t=today();pts[t]=(pts[t]||0)+n;
+ if(pts[t]>=GOAL&&!goalPaid.includes(t)){goalPaid.push(t);coins+=50;S.set("goalPaid",goalPaid);S.set("coins",coins)}S.set("awarded",awarded);S.set("pts",pts)}
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const isFac=()=>user&&user.role==="faculty";
+
+document.querySelectorAll("#roleSeg button").forEach(b=>b.onclick=()=>{role=b.dataset.r;
+ document.querySelectorAll("#roleSeg button").forEach(x=>x.classList.toggle("on",x===b));
+ $("#rollL").textContent=role==="faculty"?"Designation":"Roll number";$("#lroll").placeholder=role==="faculty"?"e.g. Asst. Professor":"e.g. EEE2026-041"});
+function login(){const n=$("#lname").value.trim(),e=$("#lemail").value.trim(),r=$("#lroll").value.trim();
+ if(!n||!/^\S+@\S+\.\S+$/.test(e)){$("#lerr").textContent="Enter your name and a valid email.";return}
+ user={name:n,email:e,extra:r,role};S.set("user",user);start()}
+function logout(){user=null;S.set("user",null);$("#app").classList.add("hidden");$("#login").classList.remove("hidden")}
+function start(){const t=new Date().toISOString().slice(0,10);if(!days.includes(t)){days.push(t);S.set("days",days)}
+ $("#login").classList.add("hidden");$("#app").classList.remove("hidden");
+ $("#who").textContent=user.name;$("#meAv").textContent=user.name[0].toUpperCase();
+ const tabs=[["home","🏠","Home"],["curriculum","🧭","My Journey"],["notebook","📒","My Notebook",1],["bookmarks","🔖","Bookmarks"],["doubts","💬","My Discussions"],["tools","🧮","EE Playground",1],
+  ...(isFac()?[["faculty","👩‍🏫","Faculty Panel"]]:[["cert","🎓","Certificate"]])];
+ $("#nav").innerHTML=tabs.map(([k,ic,v,nw])=>`<a class="it" data-v="${k}"><span class="ic">${ic}</span>${v}${nw?'<span class="new">New</span>':""}</a>`).join("");
+ document.querySelectorAll("#nav a").forEach(a=>a.onclick=()=>go(a.dataset.v));
+ $("#gsearch").oninput=e=>{go("curriculum",e.target.value);$("#gsearch").focus()};go("home")}
+function go(v,...a){document.querySelectorAll("#nav a").forEach(x=>x.classList.toggle("on",x.dataset.v===({lesson:"curriculum",quiz:"curriculum",cheat:"home"}[v]||v)));
+ ctx={view:v,args:a};V[v](...a);renderAside();window.scrollTo(0,0)}
+function renderAside(){const tp=pts[today()]||0,pc=Math.min(100,Math.round(100*tp/GOAL)),r=52,c=2*Math.PI*r,left=24-new Date().getHours();
+ $("#aside").innerHTML=`<div class="row" style="gap:14px;flex-wrap:nowrap"><div class="av lg">${esc(user.name[0].toUpperCase())}</div><div><b style="font-size:17px">${esc(user.name)}</b>
+  <div style="color:var(--blue);font-size:14px;margin-top:4px">🏆 ${isFac()?"Faculty":"Streak: "+streak()+" day"+(streak()===1?"":"s")}</div><div class="muted">${new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})}</div></div></div>
+ <div class="statrow"><div><span style="font-size:28px">⭐</span><b>${totalPts().toLocaleString()}</b><span class="muted">Points</span></div><div><span style="font-size:28px">🪙</span><b>${coins}</b><span class="muted">Coins</span></div></div>
+ <div class="card"><div class="row between"><b style="font-size:18px">Daily Goal</b><span style="color:var(--ok);font-size:14px;font-weight:600">⏳ ${left}Hrs Left</span></div>
+  <div class="goal"><svg width="130" height="130" viewBox="0 0 130 130"><circle cx="65" cy="65" r="${r}" fill="none" stroke="var(--line)" stroke-width="10"/>
+   <circle cx="65" cy="65" r="${r}" fill="none" stroke="var(--ok)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-pc/100)}" transform="rotate(-90 65 65)"/>
+   <text x="65" y="60" text-anchor="middle" font-size="20">⭐</text><text x="65" y="84" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">${Math.min(tp,GOAL)}/${GOAL}</text></svg></div>
+  <div style="text-align:center"><span class="tag">${goalPaid.includes(today())?"✅ Reward collected":"Daily Goal Reward 🪙 50"}</span></div>
+  <p class="muted" style="margin:12px 0 0">Earn points: finish a lesson +40, read a cheat sheet +10, pass a quiz +50, ask or answer a doubt +10.</p></div>
+ <div class="card" style="margin-top:14px"><b>📢 Announcements</b>${ann.slice(0,3).map(a=>`<div class="doubt"><div>${esc(a.t)}</div><div class="muted">${esc(a.by)} · ${esc(a.at)}</div></div>`).join("")}</div>`}
+const rerender=()=>V[ctx.view](...ctx.args);
+const modPct=m=>Math.round(100*m.lessons.filter(l=>done.includes(l.key)).length/m.lessons.length);
+const allPct=()=>Math.round(100*done.length/ALL.length);
+const passed=id=>(quiz[id]||0)>=70;
+function streak(){let s=0,d=new Date();while(days.includes(d.toISOString().slice(0,10))){s++;d.setDate(d.getDate()-1)}return s}
+const kind=l=>'<span class="tag blue">▶ Plays here</span>';
+const GR=["linear-gradient(110deg,#d9467e,#f39abc)","linear-gradient(110deg,#2457d6,#7aa5ff)","linear-gradient(110deg,#0f9d74,#6fd8b5)","linear-gradient(110deg,#c2410c,#fbbf24)"];
+function topicCard(m,collapsed){const mi=MODULES.indexOf(m),dn=m.lessons.filter(l=>done.includes(l.key)).length,tot=m.lessons.length+2,
+ got=dn+(awarded.includes("cheat-"+m.id)?1:0)+(passed(m.id)?1:0);
+ return `<div class="topic"><div class="hd" style="background:${GR[mi%GR.length]}"><small>MODULE ${mi+1} · ELECTRICAL ENGINEERING</small><h3>${m.title}</h3></div>
+ <div class="tl"><div class="grp"><span class="ring ${got===tot?"full":""}"></span>${m.desc} (${got}/${tot})</div>
+ ${collapsed?`<div class="ti" onclick="this.closest('.topic').outerHTML=topicCard(MODULES[${mi}])"><span class="muted">Show all ${tot} items</span><span class="arrow">⌄</span></div>`:
+ m.lessons.map(l=>`<div class="ti ${done.includes(l.key)?"dn":""}" onclick="go('lesson','${l.key}')"><div><div>${l.t}</div><div class="row" style="margin-top:8px"><span class="pill v">🎥 VIDEO</span><span class="muted">🕒 ${l.mins} Mins</span></div></div><span class="arrow">→</span></div>`).join("")+
+ `<div class="ti ${awarded.includes("cheat-"+m.id)?"dn":""}" onclick="go('cheat','${m.id}')"><div><div>${m.title} | Cheat Sheet</div><div class="row" style="margin-top:8px"><span class="pill c">📖 CHEAT SHEET</span><span class="muted">🕒 10 Mins</span></div></div><span class="arrow">→</span></div>
+  <div class="ti ${passed(m.id)?"dn":""}" onclick="go('quiz','${m.id}')"><div><div>MCQ Practice ${mi+1}</div><div class="row" style="margin-top:8px"><span class="pill p">📝 PRACTICE</span><span class="muted">🕒 10 Mins</span>${quiz[m.id]!=null?`<span class="muted">Best ${quiz[m.id]}%</span>`:""}</div></div><span class="arrow">→</span></div>`}
+ </div></div>`}
+const exHtml=m=>m.ex.length?`<details style="margin-top:10px"><summary class="muted" style="cursor:pointer">Extra videos on YouTube (${m.ex.length}) — open in a new tab</summary>${m.ex.map(([t,id])=>`<a class="lesson" style="color:inherit;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${id}"><span class="dot">↗</span>${t}</a>`).join("")}</details>`:"";
+
+const V={
+home(sel){const next=ALL.find(l=>!done.includes(l.key)),cur=next?next.m:MODULES[MODULES.length-1],m=MODULES.find(x=>x.id===sel)||cur;
+ const chips=MODULES.map((x,i)=>{const p=modPct(x);return `<div class="mod ${x===m?"on":""} ${p>0?"st":""} ${p===100&&passed(x.id)?"fin":""}" title="${x.title} · ${p}%" onclick="V.home('${x.id}')"><small>MODULE</small><div class="bx">${i+1}</div><div class="nm">${x.title}</div></div>`}).join("");
+ $("#view").innerHTML=`<h1 style="margin:0;font-size:30px">Hi ${esc(user.name.split(" ")[0])} 👋</h1>
+ <div class="muted" style="margin-top:6px">${isFac()?`${doubts.filter(d=>!d.replies.some(r=>r.fac)).length} student doubts are waiting for you.`:next?`You're ${allPct()}% through the course. Pick up where you left off.`:"🎉 Course complete! Grab your certificate."}</div>
+ <div class="mods"><button class="ghost sm" onclick="$('.mods .wrap').scrollBy(-260,0)">‹</button><div class="wrap">${chips}</div><button class="ghost sm" onclick="$('.mods .wrap').scrollBy(260,0)">›</button></div>
+ ${!isFac()&&next&&m===cur?`<div class="banner row between"><span>▶ Up next: <b>${next.t}</b></span><button class="sm" onclick="go('lesson','${next.key}')">Continue</button></div>`:""}
+ ${topicCard(m)}`},
+curriculum(q=""){const match=l=>l.t.toLowerCase().includes(q.toLowerCase());
+ $("#view").innerHTML=`<h2>Curriculum</h2>
+ <div class="row"><input id="srch" style="max-width:320px" placeholder="Search lessons…" value="${esc(q)}"></div>
+ <div style="margin-top:16px">${MODULES.map((m,mi)=>{const ls=m.lessons.filter(match);if(!ls.length&&q)return"";
+  return `<div class="card module"><div class="module-h"><div><span class="tag">Module ${mi+1}</span><b>${m.title}</b><div class="muted">${m.desc}</div></div>
+   <button class="sm ${passed(m.id)?"ghost":""}" onclick="go('quiz','${m.id}')">${quiz[m.id]!=null?`Quiz: ${quiz[m.id]}% · Retake`:"Take quiz"}</button></div>
+   <div style="margin-top:8px">${ls.map(l=>`<div class="lesson" onclick="go('lesson','${l.key}')"><span class="dot ${done.includes(l.key)?"done":""}">${done.includes(l.key)?"✓":""}</span><span style="flex:1">${l.t}</span>${kind(l)}</div>`).join("")}</div>
+   ${exHtml(m)}</div>`}).join("")||'<p class="muted">No lessons match.</p>'}</div>`;
+ $("#srch").oninput=e=>{const p=e.target.selectionStart;V.curriculum(e.target.value);$("#srch").focus();$("#srch").setSelectionRange(p,p)}},
+
+lesson(key,tab="doubts"){const idx=ALL.findIndex(l=>l.key===key),l=ALL[idx],m=l.m,qs=doubts.filter(d=>d.lesson===key),isDone=done.includes(key);
+ $("#view").innerHTML=`<a class="muted" style="cursor:pointer" onclick="go('curriculum')">← Curriculum</a>
+ <div class="muted" style="margin-top:6px">${m.title}</div><div class="row between"><h2 style="margin:0 0 16px">${l.t}</h2><button class="ghost sm" style="margin-bottom:16px" onclick="toggleBm('${key}')">${bm.includes(key)?"🔖 Bookmarked":"🔖 Bookmark"}</button></div>
+ <div class="player"><div>
+  ${l.yt?(location.protocol==="file:"||window.self!==window.top?`<a class="video" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${l.yt}" style="display:grid;place-items:center;text-align:center;color:#fff;text-decoration:none;background:linear-gradient(135deg,#1f2937,#111)"><div><div style="font-size:56px">▶</div><b>Watch this lesson on YouTube</b><div style="opacity:.7;font-size:14px;margin-top:6px">Opens in a new tab</div></div></a>`:false)||(location.protocol==="file:"?`<div class="video" style="display:grid;place-items:center;text-align:center;color:#fff;padding:20px"><div>YouTube videos can't play when this page is opened as a file.<br><br><a style="color:#fbbf24" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${l.yt}">▶ Watch on YouTube</a></div></div>`
+   :`<iframe class="video" src="https://www.youtube.com/embed/${l.yt}?rel=0&origin=${encodeURIComponent(location.origin)}" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>`)
+   +`<div class="muted" style="margin-top:6px">Video not loading? <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${l.yt}">Open it on YouTube</a></div>`
+   :l.file?`<video class="video" controls preload="metadata" src="${l.file}"></video>`
+   :`<div class="video" style="display:grid;place-items:center;text-align:center;color:#fff;background:linear-gradient(135deg,#1e293b,#0f172a)"><div><div style="font-size:52px">🎬</div><b style="font-size:20px">Video coming soon</b><div style="opacity:.7;margin-top:6px">This lecture is being recorded. Read the study notes below meanwhile.</div></div></div>`}
+  <div class="row between" style="margin-top:10px">
+   <div class="row"><button class="ghost sm" ${idx?"":"disabled"} onclick="go('lesson','${ALL[idx-1]?.key}')">← Prev</button>
+   <button class="ghost sm" ${ALL[idx+1]?"":"disabled"} onclick="go('lesson','${ALL[idx+1]?.key}')">Next →</button></div>
+   ${isFac()?"":`<button class="${isDone?"ghost":""}" onclick="toggleDone('${key}')">${isDone?"✓ Completed":"Mark as complete"}</button>`}</div>
+  <div class="tabs">${[["doubts",`Doubts (${qs.length})`],["notes","Study notes"],["my","My notes"]].map(([k,v])=>`<button class="sm ${k===tab?"":"ghost"}" onclick="go('lesson','${key}','${k}')">${v}</button>`).join("")}</div>
+  <div class="card">${tab==="notes"?`<b>Key points</b><p>${l.n}</p>${l.cr?`<p class="muted">Video: ${l.cr}, via ${CR}.</p>`:""}`
+   :tab==="my"?`<textarea id="mynote" rows="7" placeholder="Write your own notes for this lesson…">${esc(notes[key]||"")}</textarea><div class="row" style="margin-top:8px"><button class="sm" onclick="saveNote('${key}')">Save notes</button><span class="muted" id="saved"></span></div>`
+   :`${isFac()?"":`<b>Ask a doubt about this lesson</b><textarea id="q" rows="3" style="margin-top:8px" placeholder="Describe what's confusing. Include the timestamp if you can, e.g. 03:20"></textarea>
+     <div class="row" style="margin-top:8px"><button class="sm" onclick="ask('${key}')">Post doubt</button></div>`}
+     ${qs.map(doubtHtml).join("")||'<p class="muted">No doubts yet for this lesson.</p>'}`}</div>
+ </div><div class="card" style="align-self:start"><b>${m.title}</b><div class="bar"><i style="width:${modPct(m)}%"></i></div>
+  <div style="margin-top:8px">${m.lessons.map(x=>`<div class="lesson ${x.key===key?"on":""}" onclick="go('lesson','${x.key}')"><span class="dot ${done.includes(x.key)?"done":""}">${done.includes(x.key)?"✓":""}</span><span style="flex:1;font-size:14px">${x.t}</span></div>`).join("")}</div>
+  <button class="ghost sm" style="width:100%;margin-top:10px" onclick="go('quiz','${m.id}')">📝 Module quiz</button>${exHtml(m)}</div></div>`},
+
+quiz(id,res){const m=MODULES.find(x=>x.id===id),Q=QUIZ[id];
+ $("#view").innerHTML=`<a class="muted" style="cursor:pointer" onclick="go('curriculum')">← Curriculum</a><h2>Quiz: ${m.title}</h2>
+ <p class="muted">Pass mark 70%. ${quiz[id]!=null?`Best score: ${quiz[id]}%`:""}</p>
+ ${Q.map((q,i)=>`<div class="card" style="margin-bottom:12px"><b>Q${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<label class="opt ${res?(j===q[2]?"right":res[i]===j?"wrong":""):""}"><input type="radio" name="q${i}" value="${j}" ${res&&res[i]===j?"checked":""} ${res?"disabled":""}>${o}</label>`).join("")}</div>`).join("")}
+ ${res?`<div class="card"><h3 style="margin:0">${Math.round(100*res.filter((a,i)=>a===Q[i][2]).length/Q.length)}% ${Math.round(100*res.filter((a,i)=>a===Q[i][2]).length/Q.length)>=70?"✅ Passed":"❌ Try again"}</h3>
+  <div class="row" style="margin-top:10px"><button onclick="go('quiz','${id}')">Retake</button><button class="ghost" onclick="go('curriculum')">Back</button></div></div>`
+  :`<button onclick="submitQuiz('${id}')">Submit answers</button>`}`},
+
+doubts(f="all"){const F={all:"All",mine:"Mine",unanswered:"Awaiting faculty",resolved:"Resolved"};
+ const list=doubts.filter(d=>f==="all"||(f==="mine"?d.email===user.email:f==="unanswered"?!d.replies.some(r=>r.fac):d.resolved));
+ $("#view").innerHTML=`<h2>Doubt Forum</h2>
+ ${isFac()?"":`<div class="card"><b>Ask a doubt</b><label>Topic</label><select id="dmod"><option value="">General</option>${ALL.map(l=>`<option value="${l.key}">${l.m.title} — ${l.t}</option>`).join("")}</select>
+  <label>Your question</label><textarea id="q" rows="3" placeholder="Ask anything about electrical engineering…"></textarea>
+  <div class="row" style="margin-top:8px"><button onclick="ask($('#dmod').value)">Post doubt</button></div></div>`}
+ <div class="tabs">${Object.keys(F).map(k=>`<button class="sm ${k===f?"":"ghost"}" onclick="go('doubts','${k}')">${F[k]}</button>`).join("")}</div>
+ <div class="card">${list.map(doubtHtml).join("")||'<p class="muted">No doubts here.</p>'}</div>`},
+
+tools(){const colors=["black","brown","red","orange","yellow","green","blue","violet","grey","white"],hex=["#000","#8b4513","#e11d48","#f97316","#facc15","#16a34a","#2563eb","#7c3aed","#9ca3af","#fff"];
+ const sel=(id,def,extra="")=>`<select id="${id}">${colors.map((c,i)=>`<option value="${i}" ${i===def?"selected":""}>${c}</option>`).join("")}${extra}</select>`;
+ $("#view").innerHTML=`<h2>EE Tools Lab</h2><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+ <div class="card tool"><b>Ohm's Law Calculator</b><div class="muted">Fill any two values.</div>
+  <label>Voltage V (volts)</label><input id="ov" type="number"><label>Current I (amps)</label><input id="oi" type="number"><label>Resistance R (ohms)</label><input id="or" type="number">
+  <div class="row" style="margin-top:10px"><button class="sm" onclick="ohm()">Calculate</button><button class="ghost sm" onclick="['ov','oi','or'].forEach(i=>$('#'+i).value='');$('#oo').textContent=''">Clear</button></div><div class="out" id="oo"></div></div>
+ <div class="card tool"><b>Resistor Colour Code</b><div class="muted">4-band resistor</div>
+  <div class="bands" id="bands"></div><label>Band 1</label>${sel("b1",1)}<label>Band 2</label>${sel("b2",0)}<label>Multiplier</label>${sel("b3",2)}
+  <label>Tolerance</label><select id="b4"><option value="5">gold ±5%</option><option value="10">silver ±10%</option><option value="1">brown ±1%</option></select><div class="out" id="ro"></div></div>
+ <div class="card tool"><b>Three-Phase Power</b><div class="muted">P = √3 · V<sub>L</sub> · I<sub>L</sub> · cosφ</div>
+  <label>Line voltage (V)</label><input id="tv" type="number" value="415"><label>Line current (A)</label><input id="ti" type="number" value="10"><label>Power factor</label><input id="tp" type="number" value="0.8" step="0.01">
+  <div class="out" id="to"></div></div>
+ <div class="card tool"><b>Transformer Turns Ratio</b><div class="muted">V2 = V1 × N2 / N1</div>
+  <label>Primary voltage V1</label><input id="xv" type="number" value="230"><label>Primary turns N1</label><input id="xn1" type="number" value="1000"><label>Secondary turns N2</label><input id="xn2" type="number" value="50">
+  <div class="out" id="xo"></div></div>
+ <div class="card tool"><b>Electricity Bill Estimator</b><label>Load (watts)</label><input id="ew" type="number" value="1500"><label>Hours per day</label><input id="eh" type="number" value="4"><label>Rate per unit (₹/kWh)</label><input id="er" type="number" value="7">
+  <div class="out" id="eo"></div></div></div>`;
+ const fmt=v=>v>=1e6?(v/1e6)+" MΩ":v>=1e3?(v/1e3)+" kΩ":v+" Ω";
+ const upd=()=>{const b=[1,2,3].map(i=>+$("#b"+i).value),tol=$("#b4").value;
+  $("#bands").innerHTML=[...b.map(i=>hex[i]),{5:"#d4af37",10:"#c0c0c0",1:"#8b4513"}[tol]].map(c=>`<i style="background:${c}"></i>`).join("");
+  $("#ro").textContent=fmt((b[0]*10+b[1])*10**b[2])+" ±"+tol+"%";
+  const p=Math.sqrt(3)*$("#tv").value*$("#ti").value*$("#tp").value;$("#to").textContent=(p/1000).toFixed(2)+" kW";
+  const n1=+$("#xn1").value;$("#xo").textContent=n1?($("#xv").value*$("#xn2").value/n1).toFixed(2)+" V · "+($("#xn2").value>n1?"step-up":"step-down"):"—";
+  const u=$("#ew").value*$("#eh").value*30/1000;$("#eo").textContent=u.toFixed(1)+" units/month ≈ ₹"+(u*$("#er").value).toFixed(0)};
+ document.querySelectorAll(".tool select,.tool input:not(#ov):not(#oi):not(#or)").forEach(e=>e.oninput=upd);upd()},
+
+cert(){const allDone=done.length===ALL.length,allQ=MODULES.every(m=>passed(m.id));
+ if(!(allDone&&allQ)){$("#view").innerHTML=`<h2>Certificate</h2><div class="card"><p>Finish every requirement to unlock your certificate:</p>
+  <p>${allDone?"✅":"⬜"} Complete all ${ALL.length} lessons (${done.length} done)</p>
+  ${MODULES.map(m=>`<p>${passed(m.id)?"✅":"⬜"} Pass quiz: ${m.title} ${quiz[m.id]!=null?`(best ${quiz[m.id]}%)`:""}</p>`).join("")}</div>`;return}
+ const avg=Math.round(MODULES.reduce((s,m)=>s+quiz[m.id],0)/MODULES.length),id="VA-"+(user.email.length*7919+done.length).toString(36).toUpperCase();
+ $("#view").innerHTML=`<div class="cert"><div class="logo">⚡ Volt<span>Academy</span></div><p class="muted">Department of Electrical Engineering</p>
+  <p>This certifies that</p><h1>${esc(user.name)}</h1><p class="muted">${esc(user.extra)}</p>
+  <p>has completed <b>Foundations of Electrical Engineering</b><br>(${MODULES.length} modules · ${ALL.length} lessons) with an average quiz score of <b>${avg}%</b>.</p>
+  <p class="muted">Issued ${new Date().toLocaleDateString()} · Certificate ID ${id}</p><p style="margin-top:30px">______________________<br>Head of Department</p></div>
+  <div class="row noprint" style="justify-content:center;margin-top:16px"><button onclick="print()">🖨 Print / Save as PDF</button></div>`},
+
+cheat(id){const m=MODULES.find(x=>x.id===id);award("cheat-"+id,10);
+ $("#view").innerHTML=`<a class="muted" style="cursor:pointer" onclick="go('home')">← Schedule</a><h2 style="margin-top:8px">${m.title} | Cheat Sheet</h2>
+ ${m.lessons.map(l=>`<div class="card" style="margin-bottom:12px"><b>${l.t}</b><p style="margin:8px 0 0">${l.n}</p></div>`).join("")}
+ <div class="row"><button onclick="go('quiz','${id}')">📝 Practice MCQs</button><button class="ghost" onclick="print()">🖨 Print</button></div>`},
+notebook(){const ks=Object.keys(notes).filter(k=>notes[k]&&notes[k].trim()&&ALL.find(l=>l.key===k));
+ $("#view").innerHTML=`<h2>My Notebook</h2><p class="muted">All the notes you've written under lessons, in one place.</p>
+ ${ks.map(k=>{const l=ALL.find(x=>x.key===k);return `<div class="card" style="margin-bottom:12px"><div class="row between"><b>${l.t}</b><a style="color:var(--blue);cursor:pointer" onclick="go('lesson','${k}','my')">Edit →</a></div><div class="muted">${l.m.title}</div><p style="white-space:pre-wrap;margin:8px 0 0">${esc(notes[k])}</p></div>`}).join("")
+  ||'<div class="card"><p class="muted">No notes yet. Open any lesson and use the "My notes" tab.</p></div>'}`},
+bookmarks(){const ls=ALL.filter(l=>bm.includes(l.key));
+ $("#view").innerHTML=`<h2>Bookmarks</h2>${ls.length?`<div class="card">${ls.map(l=>`<div class="lesson" onclick="go('lesson','${l.key}')"><span>🔖</span><span style="flex:1">${l.t}</span><span class="muted">${l.m.title}</span></div>`).join("")}</div>`
+  :'<div class="card"><p class="muted">Nothing bookmarked yet. Tap 🔖 Bookmark on any lesson to save it here.</p></div>'}`},
+faculty(){const byLesson=ALL.map(l=>({l,c:doubts.filter(d=>d.lesson===l.key).length})).filter(x=>x.c).sort((a,b)=>b.c-a.c);
+ $("#view").innerHTML=`<h2>Faculty Panel</h2><div class="player"><div>
+  <div class="card"><b>Doubts awaiting a faculty answer</b>${doubts.filter(d=>!d.replies.some(r=>r.fac)).map(doubtHtml).join("")||'<p class="muted">All caught up 🎉</p>'}</div>
+  <div class="card" style="margin-top:14px"><b>Lessons with the most doubts</b><p class="muted">Consider adding a live session or extra notes for these.</p>
+   ${byLesson.map(x=>`<div class="row between lesson" onclick="go('lesson','${x.l.key}')"><span>${x.l.t}</span><span class="tag">${x.c}</span></div>`).join("")||'<p class="muted">No doubts yet.</p>'}</div>
+ </div><div class="card" style="align-self:start"><b>Post an announcement</b><textarea id="an" rows="4" style="margin-top:8px" placeholder="e.g. Live doubt-clearing session Friday 4 PM"></textarea>
+  <button style="margin-top:8px" onclick="postAnn()">Publish</button>
+  ${ann.map(a=>`<div class="doubt"><div>${esc(a.t)}</div><div class="row between"><span class="muted">${esc(a.by)} · ${esc(a.at)}</span><button class="ghost sm" onclick="delAnn(${a.id})">Remove</button></div></div>`).join("")}</div></div>`}
+};
+
+function toggleBm(k){bm=bm.includes(k)?bm.filter(x=>x!==k):[...bm,k];S.set("bm",bm);rerender()}
+function toggleDone(k){if(!done.includes(k))award("lesson-"+k,40);done=done.includes(k)?done.filter(x=>x!==k):[...done,k];S.set("done",done);rerender()}
+function saveNote(k){notes[k]=$("#mynote").value;S.set("notes",notes);$("#saved").textContent="Saved ✓"}
+function submitQuiz(id){const Q=QUIZ[id],a=Q.map((_,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`);return c?+c.value:-1});
+ if(a.includes(-1)){alert("Please answer every question.");return}
+ const sc=Math.round(100*a.filter((x,i)=>x===Q[i][2]).length/Q.length);quiz[id]=Math.max(quiz[id]||0,sc);if(sc>=70)award("quiz-"+id,50);S.set("quiz",quiz);V.quiz(id,a)}
+function ask(lesson){const t=$("#q").value.trim();if(!t)return;
+ doubts.unshift({id:Date.now(),lesson:lesson||null,text:t,name:user.name,email:user.email,at:new Date().toLocaleString(),replies:[],resolved:false,votes:[]});
+ award("ask-"+Date.now(),10);S.set("doubts",doubts);rerender()}
+const findD=id=>doubts.find(x=>x.id===id),saveD=()=>{S.set("doubts",doubts);rerender()};
+function reply(id){const t=$("#r"+id).value.trim();if(!t)return;award("reply-"+Date.now(),10);findD(id).replies.push({id:Date.now(),name:user.name,text:t,fac:isFac()});saveD()}
+function vote(id){const d=findD(id);d.votes=d.votes.includes(user.email)?d.votes.filter(e=>e!==user.email):[...d.votes,user.email];saveD()}
+function accept(id,rid){const d=findD(id);d.replies.forEach(r=>r.acc=r.id===rid&&!r.acc);d.resolved=d.replies.some(r=>r.acc);saveD()}
+function postAnn(){const t=$("#an").value.trim();if(!t)return;ann.unshift({id:Date.now(),t,by:user.name+(user.extra?", "+user.extra:""),at:new Date().toLocaleDateString()});S.set("ann",ann);rerender()}
+function delAnn(id){ann=ann.filter(a=>a.id!==id);S.set("ann",ann);rerender()}
+function doubtHtml(d){const l=ALL.find(x=>x.key===d.lesson),mine=d.email===user.email;
+ return `<div class="doubt"><div class="row"><span class="tag">${l?esc(l.t):"General"}</span>${d.resolved?'<span class="tag ok">Resolved</span>':d.replies.some(r=>r.fac)?'<span class="tag blue">Faculty answered</span>':'<span class="tag bad">Awaiting faculty</span>'}</div>
+ <p style="margin:8px 0">${esc(d.text)}</p><div class="row muted"><span>${esc(d.name)} · ${esc(d.at)}</span>
+  <button class="ghost sm" onclick="vote(${d.id})">▲ ${d.votes.length} ${d.votes.includes(user.email)?"(you)":"Me too"}</button></div>
+ ${d.replies.map(r=>`<div class="reply ${r.acc?"acc":r.fac?"fac":""}"><b>${esc(r.name)}</b> ${r.fac?'<span class="tag blue">Faculty</span>':""}${r.acc?'<span class="tag ok">✓ Accepted</span>':""}<div>${esc(r.text)}</div>
+  ${mine||isFac()?`<button class="ghost sm" style="margin-top:6px" onclick="accept(${d.id},${r.id})">${r.acc?"Unaccept":"Accept answer"}</button>`:""}</div>`).join("")}
+ <div class="row" style="margin-top:8px"><input id="r${d.id}" style="flex:1;min-width:160px" placeholder="${isFac()?"Answer as faculty…":"Write a reply…"}"><button class="sm" onclick="reply(${d.id})">Reply</button></div></div>`}
+function ohm(){let v=parseFloat($("#ov").value),i=parseFloat($("#oi").value),r=parseFloat($("#or").value);const h=[v,i,r].filter(x=>!isNaN(x)).length;
+ if(h<2){$("#oo").textContent="Enter two values";return}
+ if(isNaN(v))v=i*r;else if(isNaN(i))i=v/r;else if(isNaN(r))r=v/i;
+ $("#ov").value=+v.toFixed(4);$("#oi").value=+i.toFixed(4);$("#or").value=+r.toFixed(4);$("#oo").textContent=`P = ${(v*i).toFixed(2)} W`}
+
+if(user)start();
+</script>
+</body>
+</html>
